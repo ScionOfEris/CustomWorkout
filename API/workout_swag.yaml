@@ -1,0 +1,9 @@
+# swagger file for workout app
+swagger: '2.0'
+info:
+  title: Workout API
+  description: custom workout app by swilson
+  version: "0.1"
+#
+
+
