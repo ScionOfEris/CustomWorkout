@@ -1,9 +1,120 @@
 # swagger file for workout app
+# swag info at https://editor2.swagger.io/#!/
 swagger: '2.0'
 info:
   title: Workout API
   description: custom workout app by swilson
   version: "0.1"
 #
+# the domain of the API
+host: workout.discordian.us
+# array of schemes the API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces: 
+  - application/json
+  - application/yaml
+paths:
+# various get/set methods here
+#
+definitions:
+# data type definitions
+  ExercisePrototype:
+  # A workout element
+    type: object
+    properties:
+      id: number # unique identifier
+      name: string # what the Ex is called
+      desc: string # description.  longer than name
+      instructions: string # lengthy instruction on how to do it
+      # for instructions, use the format of the java lang that allows you
+      # to if/then, add s's for multiples, etc.
+      # https://developer.android.com/guide/topics/resources/string-resource.html
+      # for complicated patterns, still base of simply reps + weight.
+      # but maybe like 4 reps go into first pattern, then next 4 go into next, 
+      # and the like
+      # will need a good example, but the slow/fast shoulder thing I do would work
+
+  Exercise:
+  # fully implemented workout element, put into decks
+    type: object
+    properties:
+      id: number # unique identifier
+      protoype: number # id of exercise prototype
+      numbers: array # numbers plugged into Prototype description.  maybe duration
+                     # of reps, rest between reps, etc.
+
+   Set:
+   # something you do / did as part of routine
+     type: object
+     properties: 
+       id: number # unique identifier
+       ExId: number # id of Exercise
+       userId: number # id of user
+       datestamp: date # when it was done
+       weight: number
+       reps: number
+  
+  DeckPrototype:
+  # actual workout collection of exercise   
+    type: object
+    properties:
+      id: number #unique id
+      exArray: array # array of exercises to do
+      inOrder: boolean (should it be shuffled or in order)
+
+  Deck:
+  # implented deck, belonging to a user
+    type: object
+    properties:
+      id: number # unique id
+      userId: number # unique id of user
+      protoId: number # unique id of prototype
+      ordernum: number # what place it takes for user
+      overrides: 
+        inOrder: boolean # (should it be shuffled or in order)
+        bumpnum: number # how many exercises before upping reps
+        bumptime: number # minimum number of days before upping reps
+        bumpdown: number # number of days before downgrading reps
+        weightweight: number # percentage to add when considering weight upgrades
+        imagetype: number # which selection of images to use
+  
+  User:
+    type: object # (?)
+    properties:
+      id: number #unique id
+      firstname: string
+      lastname: string
+      email: string
+      startdate: date # number?
+      defaults:
+        bumpnum: number # how many exercises before upping reps
+        bumptime: number # minimum number of days before upping reps
+        bumpdown: number # number of days before downgrading reps
+        weightweight: number # percentage to add when considering weight upgrades
+        imagetype: number # which selection of images to use
+
+  Image:
+  # images used by the app
+    type: object
+    properties:
+      id: number # unique identifier
+      ExId: number # unique identifier of owning excersize
+      ImageType: string # category of image
+      URL: string # URL of the image itself
+  #
+  #
+  Description:
+  # I probably want to change what is above.  I think I want to simplify it.
+  # sets with just have reps, plus an array of numbers fixed for the exercise.
+  # that array can get plugged into the description for a writeup.
+  # use syntax like:
+  # https://developer.android.com/guide/topics/resources/string-resource.html
+
+
+  
+
 
 
