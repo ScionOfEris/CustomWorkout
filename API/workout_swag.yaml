@@ -18,6 +18,45 @@ produces:
   - application/yaml
 paths:
 # various get/set methods here
+
+  # ExercisePrototype
+  # Exercise
+  # Set
+  # DeckPrototype
+  # Deck
+  # Gear
+  # User
+  /user:
+    post:
+      # Creates a user
+    put:
+      # Updates a user
+  /user/findById:
+    get:
+      summary: User Profile
+      parameters:
+        - name: id
+          in: query
+          description: user unique id
+          required: true
+          type: number
+      tags:
+        - User
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+      
+  # Image
+  # ImageType
+  # TickTocks
+
+
 #
 definitions:
 # data type definitions
@@ -29,6 +68,7 @@ definitions:
       name: string # what the Ex is called
       desc: string # description.  longer than name
       instructions: string # lengthy instruction on how to do it
+      gear: array # array of numbers
       # for instructions, use the format of the java lang that allows you
       # to if/then, add s's for multiples, etc.
       # https://developer.android.com/guide/topics/resources/string-resource.html
@@ -62,11 +102,13 @@ definitions:
     type: object
     properties:
       id: number #unique id
+      datestamp: date # date last changed
       exArray: array # array of exercises to do
       inOrder: boolean (should it be shuffled or in order)
 
   Deck:
   # implented deck, belonging to a user
+  # or should Decks be full copies of deckprototypes, for when users edit them?
     type: object
     properties:
       id: number # unique id
@@ -80,6 +122,14 @@ definitions:
         bumpdown: number # number of days before downgrading reps
         weightweight: number # percentage to add when considering weight upgrades
         imagetype: number # which selection of images to use
+
+  Gear:
+  # different pieces of EQ you may need
+    type: object
+    properties:
+      id: number # unique id
+      name: string # short name
+      desc: string # longer description
   
   User:
     type: object # (?)
@@ -89,6 +139,8 @@ definitions:
       lastname: string
       email: string
       startdate: date # number?
+      gear: array # array of numbers
+      dumbbells: array # array of numbers
       defaults:
         bumpnum: number # how many exercises before upping reps
         bumptime: number # minimum number of days before upping reps
@@ -102,8 +154,35 @@ definitions:
     properties:
       id: number # unique identifier
       ExId: number # unique identifier of owning excersize
-      ImageType: string # category of image
+      ImageTypeID: number # category of image unique id
       URL: string # URL of the image itself
+
+  ImageType:
+    type: object
+    properties:
+      id: number # unique id
+      name: string # name tag
+      desc: string # longer description
+
+  TickTocks:
+    type: object
+    id: number # unique id
+    name: string # name tag
+    desc: string # longer description
+    number: number # number of sounds listed (usually 2 or 4)
+    URLs: array # array of URLs
+  # apparently I need this too....
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+    
   #
   #
   Description:
